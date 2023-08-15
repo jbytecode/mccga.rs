@@ -1,0 +1,10 @@
+[package]
+name = "mccga"
+version = "0.1.0"
+edition = "2021"
+authors = ["Mehmet Hakan Satman", "@jbytecode"]
+license = "MIT"
+
+
+[dependencies]
+rand = "0.8.5"
