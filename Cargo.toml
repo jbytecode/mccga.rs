@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Mehmet Hakan Satman", "@jbytecode"]
 license = "MIT"
-
+description = "Implements the machine-coded compact genetic algorithm"
 
 [dependencies]
 rand = "0.8.5"
