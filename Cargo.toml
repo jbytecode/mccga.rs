@@ -5,6 +5,7 @@ edition = "2021"
 authors = ["Mehmet Hakan Satman", "@jbytecode"]
 license = "MIT"
 description = "Implements the machine-coded compact genetic algorithm"
+repository = "https://github.com/jbytecode/mccga.rs"
 
 [dependencies]
 rand = "0.8.5"
