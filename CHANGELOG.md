@@ -1,4 +1,10 @@
-# v0.1.3 (Upcoming release)
+# v0.1.4 (Upcoming release)
+
+
+# v0.1.3
+
+- Add independent cga() implementation without binary representation of floats.
+
 
 # v0.1.2
 

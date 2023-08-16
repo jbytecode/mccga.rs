@@ -1,6 +1,5 @@
 use rand::random;
 
-
 pub fn sample(probvector: &Vec<f64>) -> Vec<u8> {
     let n = probvector.len();
     let mut newvector = vec![0_u8; n];
@@ -48,44 +47,70 @@ pub fn isconverged(probvector: &Vec<f64>, mutrate: f64) -> bool {
     return satisfied == n;
 }
 
+pub fn single_iteration(probvector: &mut Vec<f64>, fcost: fn(&Vec<u8>) -> f64, mutrate: f64) -> () {
+    let candidate1: Vec<u8> = sample(&probvector);
+    let candidate2: Vec<u8> = sample(&probvector);
+
+    let cost1: f64 = fcost(&candidate1);
+    let cost2: f64 = fcost(&candidate2);
+
+    let mut winner: &Vec<u8> = &candidate1;
+    let mut loser: &Vec<u8> = &candidate2;
+
+    if cost2 < cost1 {
+        winner = &candidate2;
+        loser = &candidate1;
+    }
+
+    update(probvector, winner, loser, mutrate);
+}
+
+pub fn cga(fcost: fn(&Vec<u8>) -> f64, mutrate: f64, bitlen: usize) -> Vec<u8> {
+    let mut probvector: Vec<f64> = vec![0.5_f64; bitlen];
+
+    while !isconverged(&probvector, mutrate) {
+        single_iteration(&mut probvector, fcost, mutrate);
+    }
+
+    let result: Vec<u8> = sample(&probvector);
+
+    return result;
+}
 
 #[cfg(test)]
 mod tests {
 
-    use super::isequal;
+    use super::cga;
     use super::isconverged;
+    use super::isequal;
     use super::update;
 
     #[test]
-    fn test_update(){
-        let n : usize = 5;
+    fn test_update() {
+        let n: usize = 5;
         let mutrate: f64 = 0.1;
         let winner: Vec<u8> = vec![1_u8; n];
-        let loser: Vec<u8> =vec![0_u8; n];
+        let loser: Vec<u8> = vec![0_u8; n];
         let mut probvector: Vec<f64> = vec![0.5_f64; n];
 
         update(&mut probvector, &winner, &loser, mutrate);
 
-        for i in 0..n{
+        for i in 0..n {
             assert_eq!(probvector[i], 0.6_f64);
         }
-
     }
 
     #[test]
-    fn test_isequal(){
-
+    fn test_isequal() {
         // Equal
         assert!(isequal(&10.0, 9.99, 0.01));
-
 
         // Not equal
         assert!(!isequal(&10.0, 9.9, 0.01));
     }
 
     #[test]
-    fn test_isconverged(){
-
+    fn test_isconverged() {
         // Converged
         let v1: Vec<f64> = vec![1.0, 0.0, 0.0, 1.0];
         assert!(isconverged(&v1, 0.0001));
@@ -98,8 +123,40 @@ mod tests {
         let v3: Vec<f64> = vec![0.99999, 0.0, 0.0, 1.0];
         assert!(isconverged(&v3, 0.00001));
 
-        // Not converged 
+        // Not converged
         let v4: Vec<f64> = vec![0.9, 0.0, 0.0, 1.0];
         assert!(!isconverged(&v4, 0.0001));
+    }
+
+    #[test]
+    fn test_cga_maximization() {
+        fn cfmax(x: &Vec<u8>) -> f64 {
+            let mut sum: f64 = 0.0;
+            for i in 0..x.len() {
+                sum += x[i] as f64;
+            }
+            return -sum;
+        }
+        let bitlen = 20;
+        let cgaresult = cga(cfmax, 0.01, bitlen);
+        for i in 0..bitlen {
+            assert_eq!(cgaresult[i], 1_u8);
+        }
+    }
+
+    #[test]
+    fn test_cga_minimization() {
+        fn cfmin(x: &Vec<u8>) -> f64 {
+            let mut sum: f64 = 0.0;
+            for i in 0..x.len() {
+                sum += x[i] as f64;
+            }
+            return sum;
+        }
+        let bitlen = 20;
+        let cgaresult = cga(cfmin, 0.01, bitlen);
+        for i in 0..bitlen {
+            assert_eq!(cgaresult[i], 0_u8);
+        }
     }
 }
