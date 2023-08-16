@@ -1,8 +1,11 @@
-# v0.1.2 (Upcoming release)
+# v0.1.3 (Upcoming release)
+
+# v0.1.2
 
 - New tests added
 - In-place update of probability vector for speed increment
-
+- Speed improvements
+- Some undocumented parts have now docs.
 
 # v0.1.1
 

@@ -33,13 +33,15 @@ pub fn floats2bits(v: &Vec<f32>) -> Vec<u8> {
 
 pub fn bits2floats(v: &Vec<u8>) -> Vec<f32> {
     let bitsize: usize = v.len();
-    let floatssize: usize = bitsize.wrapping_div(32);
-    let mut floatvector: Vec<f32> = Vec::<f32>::with_capacity(floatssize);
+    let floatssize: usize = bitsize / 32;
+    let mut floatvector: Vec<f32> = vec![0.0_f32; floatssize];
     let mut index: usize = 0;
+    let mut findex: usize = 0;
     while index + 32 <= bitsize {
         let part: Vec<u8> = v[index..(index + 32)].iter().cloned().collect();
-        floatvector.push(f32::from_bitvector(part));
+        floatvector[findex] = f32::from_bitvector(part);
         index = index + 32;
+        findex += 1;
     }
     return floatvector;
 }
@@ -53,11 +55,10 @@ pub fn floatstodoubles(x: &Vec<f32>) -> Vec<f64> {
     return newvector;
 }
 
-
 #[cfg(test)]
 mod tests {
-    use super::{bits2floats, floats2bits};
     use super::ByteWorks;
+    use super::{bits2floats, floats2bits};
 
     #[test]
     fn bit_f32_conversation() {

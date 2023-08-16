@@ -10,8 +10,7 @@ use crate::genprobs::generate_probability_vector;
 use crate::hookejeeves::hj;
 
 fn binarycost(fcost: fn(&Vec<f64>) -> f64, candidate: &Vec<u8>) -> f64 {
-    let floats = bits2floats(candidate);
-    let doubles = floatstodoubles(&floats);
+    let doubles = floatstodoubles(&bits2floats(candidate));
     let result = fcost(&doubles);
     return result;
 }

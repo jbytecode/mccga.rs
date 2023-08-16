@@ -8,7 +8,7 @@ fn clone(x: &Vec<f64>) -> Vec<f64> {
 }
 
 fn mutate(par: &Vec<f64>, p: usize, d: f64) -> Vec<f64> {
-    let mut newpar = clone(&par);
+    let mut newpar: Vec<f64> = clone(&par);
     newpar[p - 1] += d;
     return newpar;
 }
@@ -21,17 +21,17 @@ pub fn hj(
     endstep: f64,
 ) -> Vec<f64> {
     let p = parv.len();
-    let mut currentstep = startstep;
+    let mut currentstep: f64 = startstep;
     let mut iter: usize = 0;
-    let mut par = clone(&parv);
+    let mut par: Vec<f64> = clone(&parv);
     while iter < maxiter {
-        let  fold = f(&par);
-        let  mut fnow = fold;
+        let fold = f(&par);
+        let mut fnow: f64 = fold;
         for currentp in 1..=p {
-            let  mutateleft = mutate(&par, currentp, -currentstep);
-            let  fleft = f(&mutateleft);
-            let  mutateright = mutate(&par, currentp, currentstep);
-            let  fright = f(&mutateright);
+            let mutateleft: Vec<f64> = mutate(&par, currentp, -currentstep);
+            let fleft: f64 = f(&mutateleft);
+            let mutateright: Vec<f64> = mutate(&par, currentp, currentstep);
+            let fright: f64 = f(&mutateright);
             if fleft < fold {
                 par = mutateleft;
                 fnow = fleft;
