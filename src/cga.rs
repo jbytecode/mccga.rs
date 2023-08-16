@@ -11,21 +11,18 @@ pub fn sample(probvector: &Vec<f64>) -> Vec<u8> {
     return newvector;
 }
 
-pub fn update(probvector: &Vec<f64>, winner: &Vec<u8>, loser: &Vec<u8>, mutrate: f64) -> Vec<f64> {
-    let n = probvector.len();
-    let mut newvector = vec![0.0_f64; n];
-    for i in 0..n {
-        if winner[i] == loser[i] {
-            newvector[i] = probvector[i];
-        } else {
+///
+/// In-place update of probability vector.
+pub fn update(probvector: &mut Vec<f64>, winner: &Vec<u8>, loser: &Vec<u8>, mutrate: f64) -> () {
+    for i in 0..probvector.len() {
+        if winner[i] != loser[i] {
             if winner[i] == 0 {
-                newvector[i] = (probvector[i] - mutrate).max(0.0_f64);
+                probvector[i] = (probvector[i] - mutrate).max(0.0_f64);
             }else {
-                newvector[i] = (probvector[i] + mutrate).min(1.0_f64);
+                probvector[i] = (probvector[i] + mutrate).min(1.0_f64);
             }
         }
     }
-    return newvector;
 }
 
 

@@ -6,11 +6,9 @@ use rand::random;
 
 fn getrandomvectorbetween(mins: &Vec<f64>, maxs: &Vec<f64>) -> Vec<f32> {
     let n = mins.len();
-    let mut result: Vec<f32> = Vec::<f32>::with_capacity(n);
+    let mut result: Vec<f32> = vec![0.0_f32; n];
     for i in 0..n {
-        let r = random::<f32>();
-        let val: f32 = (mins[i] as f32) + r * (maxs[i] as f32 - mins[i] as f32);
-        result.push(val);
+        result[i] = (mins[i] as f32) + random::<f32>() * (maxs[i] as f32 - mins[i] as f32);
     }
     return result;
 }

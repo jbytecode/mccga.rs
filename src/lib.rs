@@ -67,18 +67,18 @@ pub fn mccga(
         let candidate1: Vec<u8> = sample(&probvect);
         let candidate2: Vec<u8> = sample(&probvect);
 
-        let cost1 = binarycost(fcost, &candidate1);
-        let cost2 = binarycost(fcost, &candidate2);
+        let cost1: f64 = binarycost(fcost, &candidate1);
+        let cost2: f64 = binarycost(fcost, &candidate2);
 
-        let mut winner = &candidate1;
-        let mut loser = &candidate2;
+        let mut winner: &Vec<u8> = &candidate1;
+        let mut loser: &Vec<u8> = &candidate2;
 
         if cost2 < cost1 {
             winner = &candidate2;
             loser = &candidate1;
         }
 
-        probvect = update(&probvect, winner, loser, mutrate);
+        update(&mut probvect, winner, loser, mutrate);
 
         if isconverged(&probvect, mutrate) {
             break;
@@ -89,7 +89,7 @@ pub fn mccga(
 
     let firstresult =  floatstodoubles(&bits2floats(&sample(&probvect)));
     
-    let seconresult = hj(fcost, firstresult, 1000, 10.0, 0.0001);
+    let seconresult = hj(fcost, firstresult, 1000, 5.0, 0.00001);
     
     return seconresult;
 }
@@ -106,8 +106,30 @@ mod tests {
         }
         let mins: Vec<f64> = vec![-10000.0_f64; 2];
         let maxs: Vec<f64> = vec![10000.0_f64; 2];
-        let result = mccga(f, &mins, &maxs, 0.001, 100000);
-        assert!(isequal(&result[0], 3.14159265, 0.001));
-        assert!(isequal(&result[1], 2.71828, 0.001)); 
+        let result: Vec<f64> = mccga(f, &mins, &maxs, 0.001, 100000);
+        assert!(isequal(&result[0], 3.14159265, 0.0001));
+        assert!(isequal(&result[1], 2.71828, 0.0001)); 
+    }
+
+
+    #[test]
+    fn test_mccga_5_paramateres() {
+        const VALS: [f64; 5]= [7.0, 70.0, 700.0, 7000.0, 70000.0];
+        fn f(x: &Vec<f64>) -> f64 {
+            let mut sum = 0.0;
+            for i in 0..x.len(){
+                sum += (x[i] - VALS[i]).powf(2.0);
+            }
+            return sum;
+        }
+        let mins: Vec<f64> = vec![-100000.0_f64; 5];
+        let maxs: Vec<f64> = vec![100000.0_f64; 5];
+        let result: Vec<f64> = mccga(f, &mins, &maxs, 0.001, 100000);
+        let delta: f64 = 0.01;
+        println!("{:?}", result);
+        for i in 0..result.len(){
+            println!("Testing {} ?= {}", &result[i], VALS[i]);
+            assert!(isequal(&result[i], VALS[i], delta));
+        }
     }
 }

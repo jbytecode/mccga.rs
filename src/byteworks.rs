@@ -6,11 +6,9 @@ pub trait ByteWorks {
 impl ByteWorks for f32 {
     fn to_bitvector(c: f32) -> Vec<u8> {
         let u32value: u32 = c.to_bits();
-        let mut result: Vec<u8> = Vec::<u8>::with_capacity(32);
-        let mut currentbit: u8;
+        let mut result: Vec<u8> = vec![0_u8; 32];
         for i in 0..32 {
-            currentbit = (((u32value >> i) as u8) & 1) as u8;
-            result.push(currentbit);
+            result[i] = (((u32value >> i) as u8) & 1) as u8;
         }
         return result;
     }
