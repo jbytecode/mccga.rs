@@ -1,4 +1,6 @@
-# v0.1.4 (Upcoming release)
+# v0.1.5 (Upcoming release)
+
+# v0.1.4
 
 - Seperate single iteration of mccga from the main mccga() function. 
 
