@@ -15,6 +15,20 @@ fn binarycost(fcost: fn(&Vec<f64>) -> f64, candidate: &Vec<u8>) -> f64 {
     return result;
 }
 
+pub fn mccga_singleiter(probvect: &mut Vec<f64>, fcost: fn(x: &Vec<f64>)->f64, mutrate: f64) -> (){
+    let candidate1: Vec<u8> = sample(&probvect);
+    let candidate2: Vec<u8> = sample(&probvect);
+    let cost1: f64 = binarycost(fcost, &candidate1);
+    let cost2: f64 = binarycost(fcost, &candidate2);
+    let mut winner: &Vec<u8> = &candidate1;
+    let mut loser: &Vec<u8> = &candidate2;
+    if cost2 < cost1 {
+        winner = &candidate2;
+        loser = &candidate1;
+    }
+    update(probvect, winner, loser, mutrate);
+}
+
 /// Optimize f: R^n -> R type functions in n-dimensional real space.
 /// The direction of optimization is supposed to be a minimization.
 /// Maximization-typed objective functions can return the negative of the output value.
@@ -63,21 +77,7 @@ pub fn mccga(
     let mut iter = 0;
 
     while iter < maxiter {
-        let candidate1: Vec<u8> = sample(&probvect);
-        let candidate2: Vec<u8> = sample(&probvect);
-
-        let cost1: f64 = binarycost(fcost, &candidate1);
-        let cost2: f64 = binarycost(fcost, &candidate2);
-
-        let mut winner: &Vec<u8> = &candidate1;
-        let mut loser: &Vec<u8> = &candidate2;
-
-        if cost2 < cost1 {
-            winner = &candidate2;
-            loser = &candidate1;
-        }
-
-        update(&mut probvect, winner, loser, mutrate);
+        mccga_singleiter(&mut probvect, fcost, mutrate);
 
         if isconverged(&probvect, mutrate) {
             break;
