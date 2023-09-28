@@ -32,3 +32,10 @@ to minimize the objective function where result is a 2-element vector. One can t
 assert!(isequal(&result[0], 3.14159265, 0.001));
 assert!(isequal(&result[1], 2.71828, 0.001)); 
 ```
+
+## Other implementations
+
+- Python (https://github.com/jbytecode/mccga.py)
+- Julia (https://github.com/jmejia8/Metaheuristics.jl)
+
+
