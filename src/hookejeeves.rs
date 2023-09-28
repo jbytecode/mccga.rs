@@ -1,3 +1,4 @@
+
 fn clone(x: &Vec<f64>) -> Vec<f64> {
     let n: usize = x.len();
     let mut result: Vec<f64> = vec![0.0_f64; n];
@@ -53,4 +54,35 @@ pub fn hj(
     } // end of while
 
     return par;
+}
+
+
+
+
+#[cfg(test)]
+mod tests {
+
+    use super::hj;
+    use rand;
+
+    #[test]
+    fn test_hj_minimization() {
+        fn cfmin(x: &Vec<f64>) -> f64 {
+            let mut sum: f64 = 0.0;
+            for i in 0..x.len() {
+                sum += x[i] * x[i];
+            }
+            return sum;
+        }
+        let eps = 0.00001;
+        let parlen = 20;
+        let mut starter = vec![0.0_f64; parlen];
+        for i in 1..parlen {
+            starter[i] = rand::random();
+        }
+        let hjresult = hj(cfmin, starter, 10000, 1000.0, 0.000001);
+        for i in 0..parlen {
+            assert!((hjresult[i] -  0.0_f64).powf(2.0) <= eps);
+        }
+    }
 }

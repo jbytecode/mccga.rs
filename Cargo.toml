@@ -1,10 +1,10 @@
 [package]
 name = "mccga"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2021"
 authors = ["Mehmet Hakan Satman", "@jbytecode"]
 license = "MIT"
-description = "Implements the machine-coded compact genetic algorithm"
+description = "Implements the machine-coded compact genetic algorithm (MCCGA)"
 repository = "https://github.com/jbytecode/mccga.rs"
 
 [dependencies]

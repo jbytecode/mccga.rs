@@ -1,4 +1,11 @@
-# v0.1.5 (Upcoming release)
+# v0.1.6 (Upcoming version)
+
+
+# v0.1.5 
+
+- Add tests for hj (Hooke & Jeeves)
+- Update documentation
+
 
 # v0.1.4
 
